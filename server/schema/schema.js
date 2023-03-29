@@ -44,11 +44,10 @@ const feelingType = new GraphQLObjectType({
     fields: () => ({
         id: {type: GraphQLID},
         name: {type: GraphQLString},
-        games: {
+        games: { // What games have this feeling.
             type: new GraphQLList(gameType),
             resolve: (parent, args) => {
-                const results = tempData.filter(element => element.feelingId === parent.id);
-                console.log(parent);
+                const results = tempData.filter(element => element.feelingId === parent.id); // Look at games, match game feeling id with parent id (reason id).
                 return results;
             }
         }
@@ -59,7 +58,14 @@ const reasonType = new GraphQLObjectType({
     name: "Reason",
     fields: () => ({
         id: {type: GraphQLID},
-        name: {type: GraphQLString}
+        name: {type: GraphQLString},
+        games: {
+            type: new GraphQLList(gameType),
+            resolve: (parent, args) => {
+                const results = tempData.filter(element => element.reasonId === parent.id);
+                return results;
+            }
+        }
     })
 });
 
@@ -71,7 +77,6 @@ const RootQuery = new GraphQLObjectType({ // set what queries there are
             args: {id: {type: GraphQLID}},
             resolve: (parent, args) => {
                 const results = tempData.find(gameElement => gameElement.id === args.id);
-                console.log(results);
                 return results
             }
         },
@@ -80,7 +85,14 @@ const RootQuery = new GraphQLObjectType({ // set what queries there are
             args: {id: {type: GraphQLID}},
             resolve: (parent, args) => {
                 const results = tempFeeling.find(feelingElement => feelingElement.id === args.id);
-                console.log(results);
+                return results;
+            }
+        },
+        reason: {
+            type: reasonType,
+            args: {id: {type: GraphQLID}},
+            resolve: (parent, args) => {
+                const results = tempReason.find(reasonElement => reasonElement.id === args.id);
                 return results;
             }
         }
