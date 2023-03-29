@@ -95,6 +95,24 @@ const RootQuery = new GraphQLObjectType({ // set what queries there are
                 const results = tempReason.find(reasonElement => reasonElement.id === args.id);
                 return results;
             }
+        },
+        games: {
+            type: new GraphQLList(gameType),
+            resolve: () => {
+                return tempData;
+            }
+        },
+        feelings: {
+            type: new GraphQLList(feelingType),
+            resolve: () => {
+                return tempFeeling;
+            }
+        },
+        reasons: {
+            type: new GraphQLList(reasonType),
+            resolve: () => {
+                return tempReason;
+            }
         }
     }
 });
