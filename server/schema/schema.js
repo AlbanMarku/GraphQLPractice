@@ -1,5 +1,5 @@
 const graphql = require("graphql");
-const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID} = graphql;
+const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLList} = graphql;
 
 const tempData = [
     {name:"namer", genre: "tempGenre", id: "1", feelingId: "1", reasonId: "1"},
@@ -43,7 +43,15 @@ const feelingType = new GraphQLObjectType({
     name: "Feeling",
     fields: () => ({
         id: {type: GraphQLID},
-        name: {type: GraphQLString}
+        name: {type: GraphQLString},
+        games: {
+            type: new GraphQLList(gameType),
+            resolve: (parent, args) => {
+                const results = tempData.filter(element => element.feelingId === parent.id);
+                console.log(parent);
+                return results;
+            }
+        }
     })
 });
 
