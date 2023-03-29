@@ -15,7 +15,7 @@ const dbURI = "mongodb+srv://albanshqiptar:alban4321@inventorycluster.v0kg7cq.mo
 mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
-    app.listen(8080);
+    app.listen(5000);
     console.log('Connected to db!');
   })
   .catch((err) => console.log(err));

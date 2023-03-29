@@ -1,5 +1,8 @@
 const graphql = require("graphql");
 const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLList} = graphql;
+const Game = require("../model/game");
+const Feeling = require("../model/feeling");
+const Reason = require("../model/reason");
 
 const tempData = [
     {name:"namer", genre: "tempGenre", id: "1", feelingId: "1", reasonId: "1"},
@@ -117,6 +120,27 @@ const RootQuery = new GraphQLObjectType({ // set what queries there are
     }
 });
 
+const Mutation = new GraphQLObjectType({
+    name: "Mutation",
+    fields: {
+        addGame: {
+            type: gameType,
+            args: {
+                name: {type: GraphQLString},
+                genre: {type: GraphQLString}
+            },
+            resolve: (parent, args) => {
+                let game = new Game({
+                    name: args.name,
+                    genre: args.genre
+                });
+                return game.save();
+            }
+        }
+    }
+});
+
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation: Mutation
 })
