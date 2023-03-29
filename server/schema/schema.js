@@ -2,8 +2,8 @@ const graphql = require("graphql");
 const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID} = graphql;
 
 const tempData = [
-    {name:"namer", genre: "tempGenre", id: "1"},
-    {name:"namer2", genre: "tempGenre2", id: "2"}
+    {name:"namer", genre: "tempGenre", id: "1", feelingId: "1", reasonId: "1"},
+    {name:"namer2", genre: "tempGenre2", id: "2", feelingId: "2", reasonId: "2"}
 ];
 
 const tempFeeling = [
@@ -21,7 +21,21 @@ const gameType = new GraphQLObjectType({ // set the game type
     fields: () =>({
         id: {type: GraphQLID},
         name: {type: GraphQLString},
-        genre: {type: GraphQLString}
+        genre: {type: GraphQLString},
+        feeling: {
+            type: feelingType,
+            resolve: (parent, args) => {
+                const results = tempFeeling.find(element => element.id === parent.feelingId);
+                return results;
+            }
+        },
+        reason: {
+            type: reasonType,
+            resolve: (parent, args) => {
+                const results = tempReason.find(element => element.id === parent.reasonId);
+                return results;
+            }
+        }
     })
 });
 
@@ -29,8 +43,7 @@ const feelingType = new GraphQLObjectType({
     name: "Feeling",
     fields: () => ({
         id: {type: GraphQLID},
-        name: {type: GraphQLString},
-        reason: {type: reasonType}
+        name: {type: GraphQLString}
     })
 });
 
